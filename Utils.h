@@ -6,6 +6,7 @@ Utils.h contains some general functions which might come in handy.
 
 #pragma once
 #include <vector>
+#include <fstream>
 #include <string>
 
 namespace protolib
@@ -142,4 +143,37 @@ namespace protolib
 	@return std::vector containing parsed data
 	*/
 	std::vector<std::string> parseString(const std::string& input, const std::vector<std::string>& delimiters);
+
+	/**
+	Returns all lines in a file fulfilling given predicate
+
+	@param fileName file name
+	@param pred unary predicate to determine which lines to include
+	@return std::vector where each element corresponds to one line in a file
+	*/
+	template<typename UnPred>
+	std::vector<std::string> readAllLinesFromFile(const std::string& fileName, UnPred pred)
+	{
+		std::ifstream ifile(fileName);
+		std::vector<std::string> result;
+		std::string tmp;
+
+		while (std::getline(ifile, tmp))
+		{
+			if (pred(tmp))
+			{
+				result.push_back(tmp);
+			}
+		}
+
+		return result;
+	}
+
+	/**
+	Returns all lines in a file
+
+	@param fileName file name
+	@return std::vector where each element corresponds to one line in a file
+	*/
+	std::vector<std::string> readAllLinesFromFile(const std::string& fileName);
 }
