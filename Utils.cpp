@@ -39,4 +39,9 @@ namespace protolib
 
 		return result;
 	}
+
+	std::vector<std::string> readAllLinesFromFile(const std::string& fileName)
+	{
+		return readAllLinesFromFile(fileName, [](const std::string&) { return true; });
+	}
 }
