@@ -479,6 +479,30 @@ void testsUtils()
 	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, parseResult[2] == "it's");
 	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, parseResult[3] == "great");
 	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, parseResult[4] == "right?");
+
+	std::ofstream ofile("utils_test.txt");
+	if (ofile.good())
+	{
+		ofile << "First line!" << std::endl;
+		ofile << "Line nr. 2" << std::endl;
+		ofile << "3rd line" << std::endl;
+	}
+	else
+	{
+		ABORT_TESTS("File creation failed!");
+	}
+	ofile.close();
+
+	auto res = readAllLinesFromFile("utils_test.txt");
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res.size() == 3);
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res[0] == "First line!");
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res[1] == "Line nr. 2");
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res[2] == "3rd line");
+
+	res = readAllLinesFromFile("utils_test.txt", [](const std::string& str) { return str[1] == 'i'; });
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res.size() == 2);
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res[0] == "First line!");
+	UNIT_TEST(TESTS_UTILS, REQUIRE_TRUE, res[1] == "Line nr. 2");
 } 
 
 int main()
